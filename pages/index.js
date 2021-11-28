@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react'
+import { useState, Fragment } from 'react';
 import { BoxHead, Card } from '../components';
 import { useRouter } from 'next/router';
 import { Formik } from 'formik';
@@ -26,12 +26,15 @@ export default function Login(props) {
 
   const _onSubmit = values => {
     setLoading(true);
-    // localStorage.setItem('TOKEN', '123qwe')
-    // router.replace('/dashboard')
+    setTimeout(() => {
+      localStorage.setItem('TOKEN', '123qwe')
+      router.replace('/dashboard')
+      setLoading(false)
+    }, 1000);
   }
 
   return (
-    <BoxHead>
+    <BoxHead title={'Masuk'}>
       <Formik
         onSubmit={_onSubmit}
         initialValues={initialData}
