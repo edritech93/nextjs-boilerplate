@@ -1,92 +1,72 @@
-import { useState, Fragment } from 'react';
-import { BoxHead, Card } from '../components';
-import { useRouter } from 'next/router';
-import { Formik } from 'formik';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import * as Yup from 'yup';
+import {useState, useEffect} from 'react';
+import {ViewLanding, GridProduct, Loader, BannerInfo, BannerCarousel, GridCategory} from '../components';
+import {showAlert} from '../actions/app';
+import {Typography} from '@mui/material';
+import {useRouter} from 'next/router';
+import {connect} from 'react-redux';
+import {API} from '../libs/api';
 
-export default function Login(props) {
-  const router = useRouter()
+function Index(props) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [dataProduct, setDataProduct] = useState([]);
+  const [dataCategory, setDataCategory] = useState([]);
 
-  const initialData = {
-    username: '',
-    password: '',
-  }
+  useEffect(() => {
+    _loadProduct();
+  }, []);
 
-  const validateSchema = Yup.object().shape({
-    username: Yup.string()
-      .min(4, `Username minimal 4 character`)
-      .required(`Username dibutuhkan`),
-    password: Yup.string()
-      .min(6, `Password minimal 6 character`)
-      .required(`Password dibutuhkan`),
-  });
+  useEffect(() => {
+    function _loadCategory() {
+      API.singleRequest(API.getCategory())
+          .then((response) => setDataCategory(response.data))
+          .catch((error) => props.showAlert(error));
+    }
+    _loadCategory();
+  }, []);
 
-  const _onSubmit = values => {
+  function _loadProduct(text) {
     setLoading(true);
-    setTimeout(() => {
-      localStorage.setItem('TOKEN', '123qwe')
-      router.replace('/dashboard')
-      setLoading(false)
-    }, 1000);
+    const body = text ? {search: text} : null;
+    API.singleRequest(API.getProduct(body))
+        .then((response) => setDataProduct(response.data))
+        .catch((error) => props.showAlert(error))
+        .finally(() => setLoading(false));
   }
+
+  const _onPressProduct = (item) => {
+    router.push({
+      pathname: '/product-detail',
+      query: {
+        productId: item.id,
+      },
+    });
+  };
+
+  const _onPressCategory = (item) => {
+    router.push({
+      pathname: '/product-detail',
+      query: {
+        productId: item.id,
+      },
+    });
+  };
 
   return (
-    <BoxHead title={'Masuk'}>
-      <Formik
-        onSubmit={_onSubmit}
-        initialValues={initialData}
-        validationSchema={validateSchema}>
-        {({
-          values,
-          handleChange,
-          errors,
-          setFieldTouched,
-          touched,
-          isValid,
-          handleSubmit,
-        }) => (
-          <Fragment>
-            <Card
-              sx={{
-                width: '343px',
-              }}>
-              <TextField
-                id="outlined-basic"
-                label="Username"
-                variant="outlined"
-                type={'text'}
-                required={true}
-                error={touched.username && errors.username}
-                helperText={errors.username}
-                onBlur={() => setFieldTouched('username')}
-                onChange={handleChange('username')}
-                sx={{ marginBottom: 2 }}
-              />
-              <TextField
-                id={"outlined-basic"}
-                label={"Password"}
-                variant="outlined"
-                type={"password"}
-                security="true"
-                required={true}
-                value={values.password}
-                onBlur={() => setFieldTouched('password')}
-                error={touched.password && errors.password}
-                helperText={errors.password}
-                onChange={handleChange('password')}
-                sx={{ marginBottom: 2 }}
-              />
-              <Button
-                variant="contained"
-                disabled={!isValid}
-                onClick={handleSubmit}>Masuk</Button>
-            </Card>
-          </Fragment>
-        )}
-      </Formik>
-    </BoxHead>
-  )
+    <ViewLanding onSearch={(text) => _loadProduct(text)}>
+      <BannerCarousel data={dataProduct} sx={{marginBottom: '16px'}} />
+      <BannerInfo sx={{marginBottom: '16px'}} />
+      {/* <GridCategory data={dataCategory} onPress={_onPressCategory} /> */}
+      <GridProduct data={dataProduct} onPress={_onPressProduct} />
+      <Loader visible={loading} />
+    </ViewLanding>
+  );
 }
+
+const mapStateToProps = (state, ownProps) => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+  showAlert: (args) => dispatch(showAlert(args)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Index);

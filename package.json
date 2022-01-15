@@ -1,27 +1,35 @@
 {
-  "name": "startup-web",
+  "name": "next-boilerplate",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next start -p 3000",
+    "lint": "eslint . --fix",
+    "pm2-prod": "pm2 start \"yarn start --port 3001\" --name next-boilerplate"
   },
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.0",
     "@mui/material": "^5.2.1",
+    "axios": "^0.24.0",
     "formik": "^2.2.9",
+    "immutable": "^4.0.0",
     "next": "12.0.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-redux": "^7.2.6",
+    "react-responsive-carousel": "^3.2.22",
+    "redux": "^4.1.2",
     "redux-define": "^1.1.1",
+    "redux-saga": "^1.1.3",
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "eslint": "8.3.0",
-    "eslint-config-next": "12.0.4"
+    "eslint": "^8.3.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-react": "^7.27.1"
   }
 }

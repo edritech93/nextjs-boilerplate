@@ -1,32 +1,41 @@
+import {Dashboard, Info, Logout} from '@mui/icons-material';
+
 export const BASE_URL = {
-  DEV: 'http://localhost:8080/',
-  LIVE: 'https://api.balila.id/',
+  DEV: 'http://localhost:8081/',
+  LIVE: 'http://localhost:8081/',
 };
 
-export const ACTION_ITEM = {
-  EDIT: 'EDIT',
-  DELETE: 'DELETE',
-};
-
-export const TYPE_TRANSACTION = [
+export const DATA_MENU_USER = [
   {
     id: 0,
-    text: 'Setoran',
-  },
-  {
-    id: 1,
-    text: 'Penarikan',
+    text: 'Produk',
+    icon: <Dashboard />,
+    push: '/product',
+    isOpen: false,
   },
 ];
 
-export const ALL_DATA = {
-  id: 999,
-  text: 'Semua',
-};
+export const DATA_MENU_DOWN = [
+  {
+    text: 'Tentang',
+    icon: <Info />,
+    push: null,
+  },
+  {
+    text: 'Keluar',
+    icon: <Logout />,
+    push: '/',
+  },
+];
 
 export const ALERT_TYPE = {
+  SUCCESS: 'success',
   ERROR: 'error',
   WARNING: 'warning',
   INFO: 'info',
-  SUCCESS: 'success',
+};
+
+export const ROLE = {
+  ADMIN: 'ADMIN',
+  USER: 'USER',
 };
