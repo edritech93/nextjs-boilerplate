@@ -1,0 +1,23 @@
+export type ProfileType = {
+  _id: string;
+  profileImage: string;
+  interests: string[];
+  onlineStatus: boolean;
+  jobOrCurrentActivity: string;
+  asking_list: string[];
+  haveEdited: boolean;
+  phoneNumber: string;
+  userId: string;
+  fullname: string;
+  createdAt: string;
+  language_spoken: string[];
+  experience: string[];
+  education: string[];
+  certificate: string[];
+  categoryId: string;
+  updatedAt: string;
+  about: string | null;
+  bio: string | null;
+  email: string;
+  username: string;
+};
